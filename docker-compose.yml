@@ -1,0 +1,30 @@
+version: '3.4'
+
+services:
+  app:
+    image: dockerexpress
+    volumes:
+      - .:/usr/src/app/
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    restart: always
+    tty: true
+    ports:
+      - 3000:3000
+    depends_on:
+      - mysql
+    command: yarn dev
+
+  mysql:
+    image: mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: sample_db
+    ports:
+      - 3306:3306
+    volumes:
+      - my_volume:/var/lib/mysql
+
+volumes:
+  my_volume:
