@@ -34,7 +34,7 @@ const register = async (req: express.Request, res: express.Response) => {
 }
 
 const login = async (req: express.Request, res: express.Response) => {
-  const email = req.body.username
+  const email = req.body.email
   const password = req.body.password
   await UserModel.findOne({ email: email }).then(success => {
     if (bcrypt.compareSync(password, success!.password)) {

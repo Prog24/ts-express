@@ -1,7 +1,8 @@
 FROM node:16-alpine
 
 WORKDIR /usr/src/app
-COPY ["package.json", "yarn.lock", "nodemon.json", "./"]
-RUN yarn install
+COPY ["package.json", "yarn.lock"]
+
 COPY . .
+RUN yarn install
 EXPOSE 3000
