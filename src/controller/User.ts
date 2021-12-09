@@ -3,22 +3,6 @@ import jwt from 'jsonwebtoken'
 import bcrypt from 'bcrypt'
 import { User as UserModel } from 'src/entities/User'
 
-type User = {
-  id: number,
-  name: string,
-  email: string
-}
-
-const users: User[] = [
-  { id: 2, name: "User1", email: "user1@example.com" },
-  { id: 2, name: "User2", email: "user2@example.com" },
-  { id: 3, name: "User3", email: "user3@example.com" }
-]
-
-const getUsers = (req: express.Request, res: express.Response) => {
-  res.send(JSON.stringify(users))
-}
-
 const register = async (req: express.Request, res: express.Response) => {
   const email = req.body.email
   const password = req.body.password
@@ -48,4 +32,4 @@ const login = async (req: express.Request, res: express.Response) => {
   })
 }
 
-export { getUsers, login, register }
+export { login, register }
