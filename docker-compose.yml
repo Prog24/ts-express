@@ -16,17 +16,26 @@ services:
       - 3000:3000
     depends_on:
       - mysql
+    networks:
+      - ts-express-network
     command: yarn dev
 
   mysql:
-    image: mysql
+    image: mysql:8.0
+    env_file: ./mysql/mysql.env
     environment:
-      MYSQL_ROOT_PASSWORD: root
-      MYSQL_DATABASE: sample_db
+      TZ: Asia/Tokyo
     ports:
       - 3306:3306
     volumes:
+      - ./mysql/my.cnf:/etc/mysql/conf.d/my.cnf
       - my_volume:/var/lib/mysql
+    networks:
+      - ts-express-network
+    command: --default-authentication-plugin=mysql_native_password
+
+networks:
+  ts-express-network:
 
 volumes:
   my_volume:
