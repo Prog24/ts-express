@@ -18,40 +18,22 @@ const createRanking = async (req: express.Request, res: express.Response) => {
     ranking_model.title = title
     ranking_model.description = description
     const save_ranking = await queryRunner.manager.save(ranking_model)
-    items.forEach(async (item: any) => {
+    const item_save_promise = items.map(async (item: any) => {
       const ranking_item_model = new RankingItemModel()
       ranking_item_model.title = item.title
       ranking_item_model.description = item.description
       ranking_item_model.ranking = save_ranking
-      await queryRunner.manager.save(ranking_item_model)
+      return await queryRunner.manager.save(ranking_item_model)
     })
+    await Promise.all(item_save_promise)
     await queryRunner.commitTransaction()
   } catch (err) {
     await queryRunner.rollbackTransaction()
+    res.send({'error': err})
   } finally {
     await queryRunner.release()
+    res.send({'success':'ok'})
   }
 }
-
-// const createRanking = (req: express.Request, res: express.Response) => {
-//   const title = req.body.title
-//   const description = req.body.description
-//   const items = req.body.items
-//   const ranking_model = new RankingModel()
-//   ranking_model.title = title
-//   ranking_model.description = description
-//   ranking_model.save().then(success => {
-//     items.map((item: any) => {
-//       const ranking_item_model = new RankingItemModel()
-//       ranking_item_model.title = item.title
-//       ranking_item_model.description = item.description
-//       ranking_item_model.ranking = success
-//       ranking_item_model.save()
-//     })
-//     res.send({'success':'OK'})
-//   }).catch(err => {
-//     res.send({'error': err.message})
-//   })
-// }
 
 export { createRanking }
