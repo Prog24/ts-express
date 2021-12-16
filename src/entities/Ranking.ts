@@ -1,11 +1,18 @@
-import { Entity, PrimaryGeneratedColumn, Column, BaseEntity, OneToMany } from 'typeorm'
+import { Entity, PrimaryGeneratedColumn, Column, BaseEntity, OneToMany, ManyToOne, JoinColumn } from 'typeorm'
 import Answer from './Answer'
 import RankingItem from './RankingItem'
+import User from './User'
 
 @Entity()
 export class Ranking extends BaseEntity {
   @PrimaryGeneratedColumn('uuid')
   public id!: string
+
+  @Column()
+  readonly userId!: string
+  @ManyToOne(type => User, user => user.rankings)
+  @JoinColumn({ name: 'userId' })
+  public user!: User
 
   @Column({
     nullable: false
