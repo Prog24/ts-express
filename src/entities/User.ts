@@ -4,8 +4,8 @@ import { IsEmail } from 'class-validator'
 @Entity()
 @Unique(['email'])
 export class User extends BaseEntity {
-  @PrimaryGeneratedColumn()
-  public id!: number
+  @PrimaryGeneratedColumn('uuid')
+  public id!: string
 
   @Column({
     nullable: false

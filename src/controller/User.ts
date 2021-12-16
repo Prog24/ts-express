@@ -22,7 +22,7 @@ const login = async (req: express.Request, res: express.Response) => {
   const password = req.body.password
   await UserModel.findOne({ email: email }).then(success => {
     if (bcrypt.compareSync(password, success!.password)) {
-      const token = jwt.sign({ email: email }, 'my_secret', { expiresIn: '1h' })
+      const token = jwt.sign({ email: email, id: success?.id }, 'my_secret', { expiresIn: '1h' })
       res.send({ token: token })
     } else {
       res.send({ 'error': 'no match' })

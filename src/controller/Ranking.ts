@@ -1,5 +1,6 @@
 import express from 'express'
 import { getManager } from 'typeorm'
+import jwt from 'jsonwebtoken'
 import { Ranking as RankingModel } from 'src/entities/Ranking'
 import { RankingItem as RankingItemModel } from 'src/entities/RankingItem'
 
@@ -8,6 +9,9 @@ const createRanking = async (req: express.Request, res: express.Response) => {
   const title = req.body.title
   const description = req.body.description
   const items = req.body.items
+  const token = res.locals.jwtPayload
+  console.log(">>>", token)
+
   await getManager().transaction(async transactionEntityManager => {
     const ranking_model = new RankingModel()
     ranking_model.title = title

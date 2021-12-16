@@ -13,6 +13,7 @@ const verifyToken = (req: express.Request, res: express.Response, next: express.
         const token = jwt.verify(authHeader.split(" ")[1], 'my_secret') as any
         if (Date.now() < token.exp * 1000) {
           console.log(token)
+          res.locals.jwtPayload = token
           next()
         } else {
           res.json({ error: "auth error" })

@@ -4,8 +4,8 @@ import RankingItem from './RankingItem'
 
 @Entity()
 export class AnswerItem extends BaseEntity {
-  @PrimaryGeneratedColumn()
-  public id!: number
+  @PrimaryGeneratedColumn('uuid')
+  public id!: string
 
   // Answerと連携
   @Column()

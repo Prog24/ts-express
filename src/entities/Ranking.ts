@@ -4,8 +4,8 @@ import RankingItem from './RankingItem'
 
 @Entity()
 export class Ranking extends BaseEntity {
-  @PrimaryGeneratedColumn()
-  public id!: number
+  @PrimaryGeneratedColumn('uuid')
+  public id!: string
 
   @Column({
     nullable: false
