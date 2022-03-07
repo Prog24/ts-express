@@ -29,7 +29,7 @@ const createRanking = async (req: express.Request, res: express.Response) => {
   }).then(success => {
     res.send({'success': 'ok'})
   }).catch(err => {
-    res.send({'error': err})
+    res.status(500).send({'message': err})
   })
 }
 
