@@ -45,30 +45,30 @@ const getRankingByRankingId = async (req: express.Request, res: express.Response
                           .createQueryBuilder('ranking')
                           .where({ id: req.params.rankingId })
                           .leftJoinAndSelect('ranking.ranking_items', 'ranking_items')
-                          .getOne();
-  res.send(ranking)
+                          .getOne()
+  if (ranking === undefined) {
+    res.status(404).send({'message':'404 Not Found'})
+  } else {
+    res.send(ranking)
+  }
 }
 
 
 const deleteRankingById = async (req: express.Request, res: express.Response) => {
   const rankingId = req.params.rankingId
-  // await getManager().transaction(async transactionEntityManager => {
-  //   const ranking = await transactionEntityManager.find(RankingModel, { id: rankingId })
-  //   const rankingItems = await transactionEntityManager.find(RankingItemModel, { rankingId: rankingId })
-  //   transactionEntityManager.softRemove(ranking)
-  //   transactionEntityManager.softRemove(rankingItems)
-  // }).then(success => {
-  //   res.send({'success':'ok'})
-  // }).catch(err => {
-  //   res.send({'error': err})
-  // })
-
-  const ranking = await RankingModel.find({ id: rankingId })
-  const rankingItems = await RankingItemModel.find({ rankingId: rankingId })
-  await RankingModel.softRemove(ranking)
-  await RankingItemModel.softRemove(rankingItems)
-
-  res.send({'message':'ok'})
+  const ranking = await RankingModel.findOne({ id: rankingId })
+  if (ranking === undefined) {
+    res.status(404).send({'message':'404 Not Found'})
+  } else {
+    if (ranking.userId !== res.locals.jwtPayload.id) {
+      res.status(403).send({'message':'403 Forbidden'})
+    } else {
+      const rankingItems = await RankingItemModel.find({ rankingId: rankingId })
+      await RankingModel.softRemove(ranking)
+      await RankingItemModel.softRemove(rankingItems)
+      res.send({'message':'ok'})
+    }
+  }
 }
 
 export { createRanking, getRankingByUser, getRankingByRankingId, deleteRankingById }
