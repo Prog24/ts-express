@@ -33,4 +33,20 @@ const createRanking = async (req: express.Request, res: express.Response) => {
   })
 }
 
-export { createRanking }
+const getRankingByUser = async (req: express.Request, res: express.Response) => {
+  const token = res.locals.jwtPayload
+  const rankings = await RankingModel.find({ userId: token.id })
+  res.send(rankings)
+}
+
+const getRankingByRankingId = async (req: express.Request, res: express.Response) => {
+  const ranking = await getManager().connection
+                          .getRepository(RankingModel)
+                          .createQueryBuilder('ranking')
+                          .where({ id: req.params.rankingId })
+                          .leftJoinAndSelect('ranking.ranking_items', 'ranking_items')
+                          .getOne();
+  res.send(ranking)
+}
+
+export { createRanking, getRankingByUser, getRankingByRankingId }

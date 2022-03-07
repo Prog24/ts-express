@@ -54,22 +54,3 @@ const app = async () => {
 }
 
 app()
-
-// const app: express.Express = express()
-// app.use(express.json())
-// app.use(express.urlencoded({ extended: true }))
-
-// // CROS(Need Fix)
-// app.use((req: express.Request, res: express.Response, next: express.NextFunction) => {
-//   res.header("Access-Control-Allow-Origin", "*")
-//   res.header("Access-Control-Allow-Methods", "*")
-//   res.header("Access-Control-Allow-Headers", "*")
-//   next()
-// })
-
-// app.use('/', noAuthRouter)
-// app.use('/', verifyToken, authRouter)
-
-// app.listen(3000, () => {
-//   console.log("Start on port 3000.")
-// })
