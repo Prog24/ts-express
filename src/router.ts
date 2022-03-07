@@ -1,6 +1,6 @@
 import express from 'express'
 import { login, register } from './controller/User'
-import { createRanking, getRankingByUser, getRankingByRankingId } from './controller/Ranking'
+import { createRanking, getRankingByUser, getRankingByRankingId, deleteRankingById } from './controller/Ranking'
 
 const noAuthRouter = express.Router()
 const authRouter = express.Router()
@@ -11,5 +11,6 @@ noAuthRouter.get('/ranking/:rankingId', getRankingByRankingId)
 
 authRouter.post('/ranking', createRanking)
 authRouter.get('/user/ranking', getRankingByUser)
+authRouter.delete('/ranking/:rankingId', deleteRankingById)
 
 export { noAuthRouter, authRouter }

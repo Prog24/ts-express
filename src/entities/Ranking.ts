@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, Column, BaseEntity, OneToMany, ManyToOne, JoinColumn } from 'typeorm'
+import { Entity, PrimaryGeneratedColumn, Column, BaseEntity, OneToMany, ManyToOne, JoinColumn, DeleteDateColumn } from 'typeorm'
 import Answer from './Answer'
 import RankingItem from './RankingItem'
 import User from './User'
@@ -35,6 +35,9 @@ export class Ranking extends BaseEntity {
     default: () => 'CURRENT_TIMESTAMP', onUpdate: 'CURRENT_TIMESTAMP'
   })
   public updated_at!: Date
+
+  @DeleteDateColumn()
+  deletedAt?: Date;
 
   // RankingItem(質問項目)との連携
   @OneToMany(type => RankingItem, ranking_item => ranking_item.ranking)

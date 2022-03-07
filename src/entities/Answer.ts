@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, Column, BaseEntity, ManyToOne, JoinColumn, OneToMany } from 'typeorm'
+import { Entity, PrimaryGeneratedColumn, Column, BaseEntity, ManyToOne, JoinColumn, OneToMany, DeleteDateColumn } from 'typeorm'
 import AnswerItem from './AnswerItem'
 import Ranking from './Ranking'
 
@@ -9,7 +9,7 @@ export class Answer extends BaseEntity {
 
   // Rankingとの連携
   @Column()
-  readonly rankingId!: number
+  readonly rankingId!: string
   @ManyToOne(type => Ranking, ranking => ranking.answers)
   @JoinColumn({ name: 'rankingId' })
   public ranking!: Ranking
@@ -30,6 +30,9 @@ export class Answer extends BaseEntity {
     default: () => 'CURRENT_TIMESTAMP', onUpdate: 'CURRENT_TIMESTAMP'
   })
   public updated_at!: Date
+
+  @DeleteDateColumn()
+  deletedAt?: Date;
 
   // AnswerItemとの連携
   @OneToMany(type => AnswerItem, answer_item => answer_item.answer)

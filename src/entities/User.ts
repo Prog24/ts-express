@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, Column, BaseEntity, Unique, OneToMany } from 'typeorm'
+import { Entity, PrimaryGeneratedColumn, Column, BaseEntity, Unique, OneToMany, DeleteDateColumn } from 'typeorm'
 import { IsEmail } from 'class-validator'
 import Ranking from './Ranking'
 
@@ -28,6 +28,9 @@ export class User extends BaseEntity {
     default: () => 'CURRENT_TIMESTAMP', onUpdate: 'CURRENT_TIMESTAMP'
   })
   public updated_at!: Date
+
+  @DeleteDateColumn()
+  deletedAt?: Date;
 
   @OneToMany(type => Ranking, ranking => ranking.user, { cascade: ['insert', 'update'] })
   public rankings?: Ranking[]

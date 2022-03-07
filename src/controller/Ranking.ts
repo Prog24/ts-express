@@ -49,4 +49,26 @@ const getRankingByRankingId = async (req: express.Request, res: express.Response
   res.send(ranking)
 }
 
-export { createRanking, getRankingByUser, getRankingByRankingId }
+
+const deleteRankingById = async (req: express.Request, res: express.Response) => {
+  const rankingId = req.params.rankingId
+  // await getManager().transaction(async transactionEntityManager => {
+  //   const ranking = await transactionEntityManager.find(RankingModel, { id: rankingId })
+  //   const rankingItems = await transactionEntityManager.find(RankingItemModel, { rankingId: rankingId })
+  //   transactionEntityManager.softRemove(ranking)
+  //   transactionEntityManager.softRemove(rankingItems)
+  // }).then(success => {
+  //   res.send({'success':'ok'})
+  // }).catch(err => {
+  //   res.send({'error': err})
+  // })
+
+  const ranking = await RankingModel.find({ id: rankingId })
+  const rankingItems = await RankingItemModel.find({ rankingId: rankingId })
+  await RankingModel.softRemove(ranking)
+  await RankingItemModel.softRemove(rankingItems)
+
+  res.send({'message':'ok'})
+}
+
+export { createRanking, getRankingByUser, getRankingByRankingId, deleteRankingById }
