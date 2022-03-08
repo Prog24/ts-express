@@ -16,17 +16,17 @@ const verifyToken = (req: express.Request, res: express.Response, next: express.
           res.locals.jwtPayload = token
           next()
         } else {
-          res.json({ error: "auth error" })
+          res.status(403).json({ error: 'auth error' })
         }
       } catch (e: any) {
         console.log(e.message)
-        res.json({ error: e.message })
+        res.status(403).json({ error: e.message })
       }
     } else {
-      res.json({ error: "header format error" })
+      res.status(403).json({ error: 'header format error' })
     }
   } else {
-    res.json({ error: "handler error" })
+    res.status(403).json({ error: 'handler error' })
   }
 }
 
