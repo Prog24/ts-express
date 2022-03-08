@@ -3,6 +3,12 @@ import jwt from 'jsonwebtoken'
 import bcrypt from 'bcrypt'
 import { User as UserModel } from 'src/entities/User'
 
+declare module 'express-session' {
+  interface SessionData {
+    token: string
+  }
+}
+
 const register = async (req: express.Request, res: express.Response) => {
   const email = req.body.email
   const password = req.body.password
@@ -23,6 +29,7 @@ const login = async (req: express.Request, res: express.Response) => {
   await UserModel.findOne({ email: email }).then(success => {
     if (bcrypt.compareSync(password, success!.password)) {
       const token = jwt.sign({ email: email, id: success?.id }, 'my_secret', { expiresIn: '1h' })
+      req.session.token = token
       res.send({ token: token })
     } else {
       res.send({ 'error': 'no match' })
@@ -32,4 +39,9 @@ const login = async (req: express.Request, res: express.Response) => {
   })
 }
 
-export { login, register }
+const logout = async (req: express.Request, res: express.Response) => {
+  req.session.token = undefined
+  res.send({'message':'ok'})
+}
+
+export { login, register, logout }
