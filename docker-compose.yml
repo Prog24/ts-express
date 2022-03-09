@@ -34,8 +34,18 @@ services:
       - ts-express-network
     command: --default-authentication-plugin=mysql_native_password
 
+  redis:
+    image: redis:latest
+    ports:
+      - 6379:6379
+    volumes:
+      - redis_volume:/data
+    networks:
+      - ts-express-network
+
 networks:
   ts-express-network:
 
 volumes:
   my_volume:
+  redis_volume:

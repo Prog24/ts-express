@@ -30,7 +30,7 @@ const login = async (req: express.Request, res: express.Response) => {
     if (bcrypt.compareSync(password, success!.password)) {
       const token = jwt.sign({ email: email, id: success?.id }, 'my_secret', { expiresIn: '1h' })
       req.session.token = token
-      res.send({ token: token })
+      res.send({ sessionID: req.sessionID })
     } else {
       res.send({ 'error': 'no match' })
     }
@@ -40,8 +40,9 @@ const login = async (req: express.Request, res: express.Response) => {
 }
 
 const logout = async (req: express.Request, res: express.Response) => {
-  req.session.token = undefined
-  res.send({'message':'ok'})
+  req.session.destroy((err) => {
+    res.send({'message':'logout'})
+  })
 }
 
 export { login, register, logout }
