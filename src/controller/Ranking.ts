@@ -33,6 +33,11 @@ const createRanking = async (req: express.Request, res: express.Response) => {
   })
 }
 
+const getAllRanking = async (req: express.Request, res: express.Response) => {
+  const rankings = await RankingModel.find()
+  res.send(rankings)
+}
+
 const getRankingByUser = async (req: express.Request, res: express.Response) => {
   const token = res.locals.jwtPayload
   const rankings = await RankingModel.find({ userId: token.id })
@@ -71,4 +76,4 @@ const deleteRankingById = async (req: express.Request, res: express.Response) =>
   }
 }
 
-export { createRanking, getRankingByUser, getRankingByRankingId, deleteRankingById }
+export { createRanking, getAllRanking, getRankingByUser, getRankingByRankingId, deleteRankingById }
