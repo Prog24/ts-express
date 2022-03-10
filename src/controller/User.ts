@@ -46,6 +46,7 @@ const logout = async (req: express.Request, res: express.Response) => {
 }
 
 const csrfRequest = async (req: express.Request, res: express.Response) => {
+  res.cookie('XSRF-TOKEN', req.csrfToken())
   res.send({'csrf': req.csrfToken()})
 }
 

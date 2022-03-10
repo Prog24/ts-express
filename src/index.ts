@@ -53,10 +53,6 @@ const app = async () => {
     }
   }))
   app.use(csrf({ cookie: false }))
-  app.use((req: express.Request, res: express.Response, next: express.NextFunction) => {
-    res.cookie('XSRF-TOKEN', req.csrfToken())
-    next()
-  })
   // CROS(Need fix)
   app.use((req: express.Request, res: express.Response, next: express.NextFunction) => {
     res.header("Access-Control-Allow-Origin", "*")
