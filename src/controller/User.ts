@@ -30,7 +30,7 @@ const login = async (req: express.Request, res: express.Response) => {
     if (bcrypt.compareSync(password, success!.password)) {
       const token = jwt.sign({ email: email, id: success?.id }, 'my_secret', { expiresIn: '1h' })
       req.session.token = token
-      res.send({ sessionID: req.sessionID })
+      res.send({ 'sessionID': req.sessionID, 'csrfToken': req.csrfToken() })
     } else {
       res.send({ 'error': 'no match' })
     }
@@ -45,4 +45,8 @@ const logout = async (req: express.Request, res: express.Response) => {
   })
 }
 
-export { login, register, logout }
+const csrfRequest = async (req: express.Request, res: express.Response) => {
+  res.send({'csrf': req.csrfToken()})
+}
+
+export { login, register, logout, csrfRequest }

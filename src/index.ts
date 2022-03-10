@@ -6,6 +6,7 @@ import session from 'express-session'
 import cookieParser from 'cookie-parser'
 import { createClient } from 'redis'
 import connectRedis from 'connect-redis'
+import csrf from 'csurf'
 
 const verifyToken = (req: express.Request, res: express.Response, next: express.NextFunction) => {
   const jwtToken = req.session.token
@@ -51,6 +52,11 @@ const app = async () => {
       maxAge: 1000 * 60 * 60 // 60min
     }
   }))
+  app.use(csrf({ cookie: false }))
+  app.use((req: express.Request, res: express.Response, next: express.NextFunction) => {
+    res.cookie('XSRF-TOKEN', req.csrfToken())
+    next()
+  })
   // CROS(Need fix)
   app.use((req: express.Request, res: express.Response, next: express.NextFunction) => {
     res.header("Access-Control-Allow-Origin", "*")
