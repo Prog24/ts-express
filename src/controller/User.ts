@@ -45,9 +45,27 @@ const logout = async (req: express.Request, res: express.Response) => {
   })
 }
 
+const me = async (req: express.Request, res: express.Response) => {
+  const jwtToken = req.session.token
+  if (jwtToken === undefined) {
+    res.status(403).send({'message':'403 Forbidden'})
+  } else {
+    try {
+      const token = jwt.verify(jwtToken, 'my_secret') as any
+      await UserModel.createQueryBuilder('user').where({ id: token.id }).select(['user.id', 'user.email', 'user.created_at']).getOne().then(userInfo => {
+        res.send(userInfo)
+      }).catch(err => {
+        res.status(500).send({'message': err.message})
+      })
+    } catch (err: any) {
+      res.status(500).send({'message': err.message})
+    }
+  }
+}
+
 const csrfRequest = async (req: express.Request, res: express.Response) => {
   res.cookie('XSRF-TOKEN', req.csrfToken())
   res.send({'csrf': req.csrfToken()})
 }
 
-export { login, register, logout, csrfRequest }
+export { login, register, logout, me, csrfRequest }

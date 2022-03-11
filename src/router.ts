@@ -1,5 +1,5 @@
 import express from 'express'
-import { login, register, logout, csrfRequest } from './controller/User'
+import { login, register, logout, me, csrfRequest } from './controller/User'
 import { createRanking, getAllRanking, getRankingByUser, getRankingByRankingId, deleteRankingById } from './controller/Ranking'
 import csrf from 'csurf'
 
@@ -15,7 +15,8 @@ noAuthRouter.get('/ranking/:rankingId', getRankingByRankingId)
 
 authRouter.post('/logout', logout)
 authRouter.post('/ranking', createRanking)
-authRouter.get('/user/ranking', csrfProtect, getRankingByUser)
+authRouter.get('/me', me)
+authRouter.get('/me/ranking', csrfProtect, getRankingByUser)
 authRouter.delete('/ranking/:rankingId', deleteRankingById)
 
 export { noAuthRouter, authRouter }
